@@ -2,15 +2,13 @@
   "name": "studybuddy",
   "version": "1.0.0",
   "description": "A Telegram AI tutor with Gemini and optional per-student long-term memory powered by Walrus.",
-  "main": "dist/bot.js",
+  "main": "dist/src/bot.js",
   "scripts": {
     "dev": "tsx watch src/bot.ts",
     "build": "tsc",
-    "start": "node dist/bot.js",
+    "start": "node dist/src/bot.js",
     "smoke": "tsx scripts/smoke.ts"
   },
-  "keywords": [],
-  "author": "",
   "license": "MIT",
   "author": "psycdoek",
   "repository": {
