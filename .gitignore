@@ -1,6 +1,5 @@
 .env
 /node_modules
-.env
 .env.local
 .env.*
 !.env.example
@@ -8,3 +7,4 @@
 *.db-shm
 *.db-wal
 /dist
+/StudyBuddy PRD_ Telegram tutor with Walrus Memory.md
