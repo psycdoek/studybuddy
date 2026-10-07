@@ -23,7 +23,7 @@ export async function chat(system: string, history: Turn[], message: string, att
     { role: "user", parts: currentParts },
   ];
   const parts: string[] = [];
-  for (let attempt = 0; attempt < 3; attempt++) {
+  for (let attempt = 0; attempt < 2; attempt++) {
     const response = await getClient().models.generateContent({
       model,
       contents,
@@ -32,7 +32,7 @@ export async function chat(system: string, history: Turn[], message: string, att
     const text = response.text?.trim();
     if (!text && parts.length === 0) throw new Error("Gemini returned an empty response");
     if (text) parts.push(text);
-    if (response.candidates?.[0]?.finishReason !== "MAX_TOKENS" || attempt === 2) break;
+    if (response.candidates?.[0]?.finishReason !== "MAX_TOKENS" || attempt === 1) break;
     contents.push(
       { role: "model", parts: [{ text: text ?? "" }] },
       { role: "user", parts: [{ text: "Continue the answer from where you stopped. Do not repeat earlier text; finish the explanation and its final sentence." }] },

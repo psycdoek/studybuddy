@@ -200,7 +200,17 @@ async function main() {
     if ((process.env.MODE ?? "polling") === "webhook") {
         const handler = webhookCallback(bot, "http");
         const server = createServer(async (req, res) => {
-            if (req.url === "/webhook" && req.method === "POST") return handler(req, res);
+            if (req.url === "/webhook" && req.method === "POST") {
+                // Respond immediately to avoid Telegram's ~10s webhook timeout.
+                // The bot may take 10-30s to generate a reply (LLM + memory calls).
+                res.writeHead(200).end();
+                try {
+                    await handler(req, res);
+                } catch (e) {
+                    console.error("[webhook handler error]", e);
+                }
+                return;
+            }
             res.writeHead(200).end("StudyBuddy OK");
         });
         server.listen(Number(process.env.PORT ?? 3000));

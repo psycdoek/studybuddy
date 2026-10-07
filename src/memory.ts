@@ -74,14 +74,18 @@ export async function storeExchange(userId: string, studentMsg: string, tutorRep
 /** Approximate listing: several broad recall queries, deduped. The SDK pages reviewed show no list method. */
 export async function listApprox(userId: string): Promise<string[]> {
   const queries = ["goals and exam dates", "weak topics and mistakes", "learning style preferences", "progress and mastered topics", "level and subjects"];
+  const results = await Promise.all(
+    queries.map(async (q) => {
+      try {
+        return await recallFor(userId, q, 8);
+      } catch (e) {
+        console.warn("[listApprox]", (e as Error).message);
+        return [];
+      }
+    })
+  );
   const seen = new Set<string>();
-  for (const q of queries) {
-    try {
-      for (const t of await recallFor(userId, q, 8)) seen.add(t);
-    } catch (e) {
-      console.warn("[listApprox]", (e as Error).message);
-    }
-  }
+  for (const items of results) for (const t of items) seen.add(t);
   return [...seen];
 }
 
