@@ -7,7 +7,7 @@ Students can chat by text, send supported images and documents, review approxima
 ## Features
 
 - Telegram bot built with TypeScript and grammY.
-- Gemini-powered tutoring, with the model configurable through `GEMINI_MODEL`.
+- Gemini-powered tutoring, with ordered model fallbacks configurable through `GEMINI_MODELS`.
 - Optional per-user Walrus Memory namespaces, derived server-side from Telegram user IDs.
 - SQLite storage for user settings, recent conversation context, and local memory metadata.
 - Photo and document input: JPEG, PNG, WebP, HEIC, HEIF, PDF, TXT, CSV, and Markdown files. File limit: 15 MB; text files: 1 MB.
@@ -50,6 +50,7 @@ See `.env.example` for all settings. The main options are:
 | `TELEGRAM_BOT_TOKEN` | Telegram bot token. |
 | `GEMINI_API_KEY` | Gemini API key. |
 | `GEMINI_MODEL` | Gemini model ID; defaults to `gemini-2.5-flash`. Availability depends on your Google AI account. |
+| `GEMINI_MODELS` | Optional comma-separated ordered model list, all used with the same `GEMINI_API_KEY`. On temporary overload, rate limits, or server errors, each model is retried once before trying the next. A model that fails is deprioritized for 60 seconds, after which it is tried again. When set, this list takes precedence over `GEMINI_MODEL`. |
 | `MEMWAL_PRIVATE_KEY` | Walrus delegate private key; required for long-term memory. |
 | `MEMWAL_ACCOUNT_ID` | Walrus account that registered the delegate key. |
 | `MEMWAL_SERVER_URL` | Walrus relayer URL. The example uses staging. The account, delegate key, and relayer must use the same network. |
